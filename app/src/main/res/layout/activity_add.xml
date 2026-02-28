@@ -1,55 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="32dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Registrar actividad"
-            android:textSize="20sp"
+            android:text="Nueva Recolección"
+            android:textSize="24sp"
+            android:textColor="#333333"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
+            android:layout_gravity="center"
+            android:layout_marginBottom="32dp"/>
 
-        <EditText
-            android:id="@+id/etUsuario"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Usuario"/>
+            android:text="Zona de Limpieza"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <Spinner
+            android:id="@+id/spZona"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_marginBottom="20dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Categoría de Residuo"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
         <Spinner
             android:id="@+id/spTipo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"/>
+            android:layout_height="48dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:layout_marginBottom="20dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cantidad / Volumen"
+            android:textColor="#666666"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
         <EditText
             android:id="@+id/etCantidad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Cantidad (kg)"
+            android:hint="Ej: 5.5 (kg o L)"
             android:inputType="numberDecimal"
-            android:layout_marginTop="12dp"/>
-
-        <EditText
-            android:id="@+id/etObservacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Observación"
-            android:layout_marginTop="12dp"/>
+            android:padding="12dp"
+            android:backgroundTint="#4CAF50"
+            android:layout_marginBottom="32dp"/>
 
         <Button
             android:id="@+id/btnGuardar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Guardar"
-            android:layout_marginTop="24dp"/>
+            android:layout_height="56dp"
+            android:text="Guardar Registro"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#3A7D44"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 </ScrollView>

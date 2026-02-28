@@ -15,12 +15,13 @@ public class MainActivity extends AppCompatActivity {
 
     EditText etUsuario, etPassword;
     Button btnLogin;
+    DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. Aplicar transparencia a la barra de estado
+        // Aplicar transparencia a la barra de estado
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -36,35 +37,48 @@ public class MainActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
 
+        // 2. Inicializamos la base de datos
+        dbHelper = new DBHelper(this);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String usuario = etUsuario.getText().toString();
-                String password = etPassword.getText().toString();
+                // Limpieza de datos
+                String usuario = etUsuario.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
 
-                if (usuario.equals("admin") && password.equals("1234")) {
+                // Validación de campos vacios
+                if (usuario.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Por favor completa ambos campos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 3. Consultamos a la base de datos real
+                boolean accesoPermitido = dbHelper.verificarCredenciales(usuario, password);
+
+                if (accesoPermitido) {
 
                     Toast.makeText(
                             MainActivity.this,
-                            "Login correcto 🔥",
+                            "Login correcto",
                             Toast.LENGTH_SHORT
                     ).show();
 
-                    // 👉 IR AL HOME
+                    // Redirigir al Home
                     Intent intent = new Intent(
                             MainActivity.this,
                             HomeActivity.class
                     );
                     startActivity(intent);
 
-                    // Opcional: cerrar login
+                    // Cerrar login
                     finish();
 
                 } else {
                     Toast.makeText(
                             MainActivity.this,
-                            "Usuario o contraseña incorrectos ❌",
+                            "Usuario o contraseña incorrectos",
                             Toast.LENGTH_SHORT
                     ).show();
                 }

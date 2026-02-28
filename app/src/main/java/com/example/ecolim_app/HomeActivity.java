@@ -37,29 +37,26 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void cargarActividades() {
-
         lista = new ArrayList<>();
-        Cursor cursor = dbHelper.obtenerActividades();
+        Cursor cursor = dbHelper.obtenerRegistrosCompletos();
 
         if (cursor == null || cursor.getCount() == 0) {
-            lista.add("No hay actividades registradas");
+            lista.add("No hay recolecciones registradas");
         } else {
             while (cursor.moveToNext()) {
-
-                int id = cursor.getInt(0);
-                String usuario = cursor.getString(1);
-                String tipo = cursor.getString(2);
+                int idRegistro = cursor.getInt(0);
+                int idUsuario = cursor.getInt(1);
+                int idCategoria = cursor.getInt(2);
                 double cantidad = cursor.getDouble(3);
                 String fecha = cursor.getString(4);
-                String observacion = cursor.getString(5);
+                int idZona = cursor.getInt(5);
 
                 String texto =
-                        "ID: " + id + "\n" +
-                                "Usuario: " + usuario + "\n" +
-                                "Tipo: " + tipo + "\n" +
-                                "Cantidad: " + cantidad + " kg\n" +
-                                "Fecha: " + fecha + "\n" +
-                                "Obs: " + observacion;
+                        "Ticket #" + idRegistro + "\n" +
+                                "ID Operario: " + idUsuario + " | ID Zona: " + idZona + "\n" +
+                                "ID Categoría: " + idCategoria + "\n" +
+                                "Cantidad: " + cantidad + " (Kg/L)\n" +
+                                "Fecha: " + fecha;
 
                 lista.add(texto);
             }

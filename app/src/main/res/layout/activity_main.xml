@@ -13,12 +13,14 @@
         android:layout_height="0dp"
         android:src="@drawable/empresa_logo"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintWidth_percent="0.9"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/etUsuario"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/etUsuario"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.3"
+        android:scaleType="centerInside" />
 
     <EditText
         android:id="@+id/etUsuario"
@@ -29,6 +31,7 @@
         android:backgroundTint="#888888"
         android:paddingBottom="12dp"
         android:layout_marginTop="32dp"
+        android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/iv_logo"
         app:layout_constraintBottom_toTopOf="@+id/etPassword" />
 
@@ -40,7 +43,8 @@
         android:inputType="textPassword"
         android:backgroundTint="#888888"
         android:paddingBottom="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="32dp"
+        android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/etUsuario"
         app:layout_constraintBottom_toTopOf="@+id/btnLogin" />
 
@@ -50,11 +54,11 @@
         android:layout_height="60dp"
         android:text="Iniciar Sesión"
         android:textAllCaps="false"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:backgroundTint="#3D7A25"
         android:textColor="#FFFFFF"
         app:cornerRadius="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="80dp"
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
         app:layout_constraintBottom_toBottomOf="parent" />
 
