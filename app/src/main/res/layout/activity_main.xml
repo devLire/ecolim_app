@@ -24,7 +24,7 @@
         android:id="@+id/etUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="DNI"
+        android:hint="Nombre"
         android:inputType="number"
         android:backgroundTint="#888888"
         android:paddingBottom="12dp"
