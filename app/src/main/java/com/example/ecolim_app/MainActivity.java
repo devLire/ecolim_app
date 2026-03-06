@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText etUsuario, etPassword;
+    EditText txtDNI, txtContrasena;
     Button btnLogin;
     DBHelper dbHelper;
 
@@ -33,11 +33,10 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
 
-        etUsuario = findViewById(R.id.etUsuario);
-        etPassword = findViewById(R.id.etPassword);
+        txtDNI = findViewById(R.id.txtUsuario);
+        txtContrasena = findViewById(R.id.txtContrasena);
         btnLogin = findViewById(R.id.btnLogin);
 
-        // 2. Inicializamos la base de datos
         dbHelper = new DBHelper(this);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -45,17 +44,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // Limpieza de datos
-                String usuario = etUsuario.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
+                String dni = txtDNI.getText().toString().trim();
+                String password = txtContrasena.getText().toString().trim();
 
                 // Validación de campos vacios
-                if (usuario.isEmpty() || password.isEmpty()) {
+                if (dni.isEmpty() || password.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Por favor completa ambos campos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // 3. Consultamos a la base de datos real
-                boolean accesoPermitido = dbHelper.verificarCredenciales(usuario, password);
+                // 3. Consultamos a la base de datos
+                boolean accesoPermitido = dbHelper.verificarCredenciales(dni, password);
 
                 if (accesoPermitido) {
 
@@ -65,10 +64,13 @@ public class MainActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT
                     ).show();
 
+                    // Guardar el DNI de manera global
+                    SessionManager.guardarDNI(MainActivity.this, dni);
+
                     // Redirigir al Home
                     Intent intent = new Intent(
                             MainActivity.this,
-                            HomeActivity.class
+                            HomeUsuarioActivity.class
                     );
                     startActivity(intent);
 

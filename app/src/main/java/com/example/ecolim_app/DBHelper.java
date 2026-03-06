@@ -36,25 +36,33 @@ public class DBHelper extends SQLiteOpenHelper {
     // Creación de la DB
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        // Tablas PRINCIPALES
+
         // 1. Tabla Usuario
         db.execSQL("CREATE TABLE " + TABLE_USUARIO + " (" +
                 "id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "nombre_completo TEXT, " +
-                "dni TEXT UNIQUE, " +
+                "nombre_completo VARCHAR(40), " +
+                "dni VARCHAR(20) UNIQUE, " +
                 "contrasena TEXT, " +
-                "rol TEXT)"); // 'Operario' o 'Supervisor'
+                "rol VARCHAR(20) CHECK (rol IN ('Operario', 'Supervisor')), " + // 'Operario' o 'Supervisor'
+                "activo BOOLEAN DEFAULT TRUE)");
 
         // 2. Tabla Categoría
         db.execSQL("CREATE TABLE " + TABLE_CATEGORIA + " (" +
                 "id_categoria INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "nombre_categoria TEXT, " +
-                "unidad_medida TEXT)");
+                "nombre_categoria VARCHAR(25), " +
+                "unidad_medida VARCHAR(10), " +
+                "activo BOOLEAN DEFAULT TRUE)");
 
         // 3. Tabla Zona de Limpieza
         db.execSQL("CREATE TABLE " + TABLE_ZONA + " (" +
                 "id_zona INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "nombre_zona TEXT, " +
-                "ubicacion_especifica TEXT)");
+                "nombre_zona VARCHAR(50), " +
+                "ubicacion_especifica VARCHAR(100), " +
+                "activo BOOLEAN DEFAULT TRUE)");
+
+        // TABLA HÍBRIDA
 
         // 4. Tabla Registro
         db.execSQL("CREATE TABLE " + TABLE_REGISTRO + " (" +
@@ -62,23 +70,25 @@ public class DBHelper extends SQLiteOpenHelper {
                 "id_usuario INTEGER, " +
                 "id_zona INTEGER, " +
                 "fecha_hora TEXT, " +
-                "estado_sincronizacion INTEGER DEFAULT 0, " + // 0 = No enviado, 1 = Enviado
                 "FOREIGN KEY(id_usuario) REFERENCES " + TABLE_USUARIO + "(id_usuario), " +
                 "FOREIGN KEY(id_zona) REFERENCES " + TABLE_ZONA + "(id_zona))");
+
+
+        // TABLA SECUNDARIA
 
         // 5. Tabla Detalle
         db.execSQL("CREATE TABLE " + TABLE_DETALLE + " (" +
                 "id_detalle INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "id_registro INTEGER, " +
                 "id_categoria INTEGER, " +
-                "cantidad REAL, " +
+                "cantidad DOUBLE, " +
                 "FOREIGN KEY(id_registro) REFERENCES " + TABLE_REGISTRO + "(id_registro), " +
                 "FOREIGN KEY(id_categoria) REFERENCES " + TABLE_CATEGORIA + "(id_categoria))");
 
         // SEEDING
 
         // 1. Insertar Usuarios
-        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Baruc', '12345678', '1234', 'Operario')");
+        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Ernesto Pérez', '12345678', '1234', 'Operario')");
         db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Admin ECOLIM', '1234', 'admin', 'Supervisor')");
 
         // 2. Insertar Categorías de Residuos
@@ -112,11 +122,20 @@ public class DBHelper extends SQLiteOpenHelper {
         // Buscamos si existe un registro que coincida con el DNI y Contraseña ingresados
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ? AND contrasena = ?", new String[]{dniIngresado, passIngresada});
 
-        boolean existe = cursor.getCount() > 0;
+        boolean existe = cursor.getCount() > 0; // Si retorna 1 es porque fue una autenticación correcta (DNI y contraseña existen)
         cursor.close();
 
         return existe;
     }
+
+    // MÉTODO PARA OBTENER DATOS DEL USUARIO LOGUEADO
+    public Cursor obtenerDatosUsuarioLogueado(String dni) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Consultamos todos los campos del usuario que coincida con el DNI ingresado
+        return db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ?", new String[]{dni});
+    }
+
 
     // =========================================================================
     // MÉTODOS CRUD - TABLA USUARIO (Uso exclusivo del Supervisor)
@@ -174,7 +193,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
 
         values.put("nombre_categoria", nombreCategoria);
-        values.put("unidad_medida", unidadMedida); // Ej: 'Kg', 'Litros', 'Unidades'
+        values.put("unidad_medida", unidadMedida); // 'Kg', 'Litros', 'Unidades'
 
         long result = db.insert(TABLE_CATEGORIA, null, values);
         return result != -1;
