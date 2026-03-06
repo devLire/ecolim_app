@@ -1,6 +1,7 @@
 package com.example.ecolim_app;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     EditText txtDNI, txtContrasena;
     Button btnLogin;
     DBHelper dbHelper;
+    String dni;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,23 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
 
         dbHelper = new DBHelper(this);
+        dni = SessionManager.obtenerDNI(this);
+
+        Cursor cursor = dbHelper.obtenerDatosUsuarioLogueado(dni);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String rol = cursor.getString(cursor.getColumnIndexOrThrow("rol"));
+
+            if (rol.equals("Operario")){
+                Intent intent = new Intent(this, HomeUsuarioActivity.class);
+                startActivity(intent);
+                finish();
+            } else if (rol.equals("Supervisor")) {
+                Intent intent = new Intent(this, HomeUsuarioActivity.class); // TODO : Cambiar al Home del admin
+                startActivity(intent);
+                finish();
+            }
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

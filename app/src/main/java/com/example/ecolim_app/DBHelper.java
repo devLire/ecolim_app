@@ -88,20 +88,47 @@ public class DBHelper extends SQLiteOpenHelper {
         // SEEDING
 
         // 1. Insertar Usuarios
-        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Ernesto Pérez', '12345678', '1234', 'Operario')");
-        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Admin ECOLIM', '1234', 'admin', 'Supervisor')");
+        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Ernesto Pérez', '12345678', '1234', 'Operario')"); // ID: 1
+        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Admin ECOLIM', '1234', 'admin', 'Supervisor')"); // ID: 2
+        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('María Gómez', '87654321', '1234', 'Operario')"); // ID: 3
 
         // 2. Insertar Categorías de Residuos
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Plástico', 'Kg')");
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Orgánico', 'Kg')");
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Papel', 'Kg')");
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Peligroso', 'Litros')");
+        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Plástico', 'Kg')"); // ID: 1
+        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Orgánico', 'Kg')"); // ID: 2
+        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Papel', 'Kg')");    // ID: 3
+        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Peligroso', 'Litros')"); // ID: 4
 
         // 3. Insertar Zonas de Limpieza
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Almacén Principal', 'Planta Baja')");
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Comedor', 'Piso 1')");
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Oficinas Administrativas', 'Piso 2')");
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Patio Trasero', 'Exterior')");
+        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Almacén Principal', 'Planta Baja')"); // ID: 1
+        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Comedor', 'Piso 1')"); // ID: 2
+        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Oficinas Administrativas', 'Piso 2')"); // ID: 3
+        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Patio Trasero', 'Exterior')"); // ID: 4
+
+        // 4. Insertar Registros (Cabecera de la recolección)
+        // Registro 1: Ernesto (ID 1) limpió el Comedor (ID 2)
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 2, '2023-10-25 08:30:00')"); // ID: 1
+        // Registro 2: María (ID 3) limpió el Almacén Principal (ID 1)
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 1, '2023-10-25 09:15:00')"); // ID: 2
+        // Registro 3: Ernesto (ID 1) limpió el Patio Trasero (ID 4)
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 4, '2023-10-26 10:00:00')"); // ID: 3
+        // Registro 4: María (ID 3) limpió las Oficinas (ID 3)
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 3, '2023-10-26 14:20:00')"); // ID: 4
+
+        // 5. Insertar Detalles de los Residuos recolectados
+        // Detalles del Registro 1 (Comedor): 2.5kg Plástico y 1.2kg Orgánico
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (1, 1, 2.5)");
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (1, 2, 1.2)");
+
+        // Detalles del Registro 2 (Almacén): 5.0kg Papel
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (2, 3, 5.0)");
+
+        // Detalles del Registro 3 (Patio Trasero): 2.0 Litros Peligroso y 1.5kg Plástico
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (3, 4, 2.0)");
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (3, 1, 1.5)");
+
+        // Detalles del Registro 4 (Oficinas): 3.0kg Papel y 0.5kg Orgánico
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (4, 3, 3.0)");
+        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (4, 2, 0.5)");
     }
 
     @Override
@@ -134,6 +161,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // Consultamos todos los campos del usuario que coincida con el DNI ingresado
         return db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ?", new String[]{dni});
+    }
+
+    // MÉTODO PARA OBTENER EL HISTORIAL DE UN SOLO USUARIO
+
+    public Cursor obtenerRegistrosPorUsuario(int idUsuario) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Traemos el nombre de la categoría, cantidad, zona y fecha.
+        // Filtramos por id_usuario y ordenamos de mayor a menor (DESC)
+        String query = "SELECT c.nombre_categoria, d.cantidad, z.nombre_zona, r.fecha_hora " +
+                "FROM " + TABLE_REGISTRO + " r " +
+                "INNER JOIN " + TABLE_DETALLE + " d ON r.id_registro = d.id_registro " +
+                "INNER JOIN " + TABLE_CATEGORIA + " c ON d.id_categoria = c.id_categoria " +
+                "INNER JOIN " + TABLE_ZONA + " z ON r.id_zona = z.id_zona " +
+                "WHERE r.id_usuario = ? " +
+                "ORDER BY r.id_registro DESC";
+
+        return db.rawQuery(query, new String[]{String.valueOf(idUsuario)});
     }
 
 

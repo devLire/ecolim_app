@@ -55,6 +55,12 @@ public class PerfilActivity extends AppCompatActivity {
             labelRolUsuario.setText(rol);
 
             cursor.close();
+        } else {
+            // Si el DNI es nulo, se redirige al login
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         }
 
         btnRegresar.setOnClickListener(new View.OnClickListener() {

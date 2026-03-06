@@ -53,18 +53,21 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="24dp"
         android:hint="Nombre"
+        android:textColorHint="@color/hint_color_active"
         app:boxStrokeColor="#A5D6A7"
-        app:hintTextColor="#1B5E20"
-        app:layout_constraintTop_toBottomOf="@id/labelBienvenidaUsuario">
+        app:hintTextColor="@color/hint_color_active"
+        app:layout_constraintTop_toBottomOf="@id/labelBienvenidaUsuario"
+        tools:layout_editor_absoluteX="32dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/labelNombreUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
             android:cursorVisible="false"
+            android:focusable="false"
             android:text="Usuario"
-            android:textColor="#333333" />
+            android:textColor="#333333"
+            android:textColorHint="@color/hint_color_default" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -75,16 +78,18 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
         android:hint="DNI"
+        android:textColorHint="@color/hint_color_active"
         app:boxStrokeColor="#A5D6A7"
-        app:hintTextColor="#1B5E20"
-        app:layout_constraintTop_toBottomOf="@id/layoutNombre">
+        app:hintTextColor="@color/hint_color_active"
+        app:layout_constraintTop_toBottomOf="@id/layoutNombre"
+        tools:layout_editor_absoluteX="32dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/labelDniUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
             android:cursorVisible="false"
+            android:focusable="false"
             android:text="12345678"
             android:textColor="#333333" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -97,16 +102,18 @@
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
         android:hint="Rol"
+        android:textColorHint="@color/hint_color_active"
         app:boxStrokeColor="#A5D6A7"
-        app:hintTextColor="#1B5E20"
-        app:layout_constraintTop_toBottomOf="@id/layoutDni">
+        app:hintTextColor="@color/hint_color_active"
+        app:layout_constraintTop_toBottomOf="@id/layoutDni"
+        tools:layout_editor_absoluteX="32dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/labelRolUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
             android:cursorVisible="false"
+            android:focusable="false"
             android:text="Operario"
             android:textColor="#333333" />
     </com.google.android.material.textfield.TextInputLayout>

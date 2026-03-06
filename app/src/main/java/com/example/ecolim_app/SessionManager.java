@@ -18,7 +18,7 @@ public class SessionManager {
     // Obtener el DNI
     public static String obtenerDNI(Context context) {
         SharedPreferences pref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return pref.getString(KEY_DNI, null); // Retorna null si no existe
+        return pref.getString(KEY_DNI, "");
     }
 
     // Cerrar sesión
