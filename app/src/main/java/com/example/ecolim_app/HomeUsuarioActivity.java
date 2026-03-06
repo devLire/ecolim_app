@@ -1,8 +1,10 @@
 package com.example.ecolim_app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -16,6 +18,7 @@ public class HomeUsuarioActivity extends AppCompatActivity {
     String dni;
     TextView labelBienvenida;
     DBHelper dbHelper;
+    ImageView btnPerfil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,15 @@ public class HomeUsuarioActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
 
         labelBienvenida = findViewById(R.id.labelBienvenida);
+        btnPerfil = findViewById(R.id.btnPerfil);
+
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeUsuarioActivity.this, PerfilActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Cursor cursor = dbHelper.obtenerDatosUsuarioLogueado(dni);
 
@@ -39,7 +51,7 @@ public class HomeUsuarioActivity extends AppCompatActivity {
 
             labelBienvenida.setText("¡Bienvenido " + nombre + "!");
 
-            cursor.close(); // ¡No olvides cerrar el cursor!
+            cursor.close();
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
