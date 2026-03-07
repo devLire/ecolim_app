@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             } else if (rol.equals("Supervisor")) {
-                Intent intent = new Intent(this, HomeUsuarioActivity.class); // TODO : Cambiar al Home del admin
+                Intent intent = new Intent(this, HomeAdminActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (accesoPermitido) {
 
+
                     Toast.makeText(
                             MainActivity.this,
                             "Login correcto",
@@ -86,15 +87,21 @@ public class MainActivity extends AppCompatActivity {
                     // Guardar el DNI de manera global
                     SessionManager.guardarDNI(MainActivity.this, dni);
 
-                    // Redirigir al Home
-                    Intent intent = new Intent(
-                            MainActivity.this,
-                            HomeUsuarioActivity.class
-                    );
-                    startActivity(intent);
+                    Cursor cursor = dbHelper.obtenerDatosUsuarioLogueado(dni);
 
-                    // Cerrar login
-                    finish();
+                    if (cursor != null && cursor.moveToFirst()) {
+                        String rol = cursor.getString(cursor.getColumnIndexOrThrow("rol"));
+
+                        if (rol.equals("Operario")){
+                            Intent intent = new Intent(MainActivity.this, HomeUsuarioActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else if (rol.equals("Supervisor")) {
+                            Intent intent = new Intent(MainActivity.this, HomeAdminActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
 
                 } else {
                     Toast.makeText(

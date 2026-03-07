@@ -181,6 +181,37 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{String.valueOf(idUsuario)});
     }
 
+    // Home - Admin
+
+    // 1. Obtener el total de kg recolectados en una fecha específica
+    public double obtenerTotalKilosPorFecha(String fecha) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT SUM(d.cantidad) FROM " + TABLE_DETALLE + " d " +
+                "INNER JOIN " + TABLE_REGISTRO + " r ON d.id_registro = r.id_registro " +
+                "WHERE date(r.fecha_hora) = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{fecha});
+        double total = 0;
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0);
+        }
+        cursor.close();
+        return total;
+    }
+
+    // 2. Obtener los kilos agrupados por categoría en un rango de fechas
+    public Cursor obtenerKilosPorCategoriaRango(String fechaDesde, String fechaHasta) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT c.nombre_categoria, SUM(d.cantidad) as total_kg " +
+                "FROM " + TABLE_DETALLE + " d " +
+                "INNER JOIN " + TABLE_REGISTRO + " r ON d.id_registro = r.id_registro " +
+                "INNER JOIN " + TABLE_CATEGORIA + " c ON d.id_categoria = c.id_categoria " +
+                "WHERE date(r.fecha_hora) BETWEEN ? AND ? " +
+                "GROUP BY c.id_categoria";
+
+        return db.rawQuery(query, new String[]{fechaDesde, fechaHasta});
+    }
+
 
     // =========================================================================
     // MÉTODOS CRUD - TABLA USUARIO (Uso exclusivo del Supervisor)
