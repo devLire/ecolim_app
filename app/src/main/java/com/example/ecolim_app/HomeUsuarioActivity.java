@@ -15,14 +15,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class HomeUsuarioActivity extends AppCompatActivity {
 
     String dni;
-    TextView labelBienvenida;
     DBHelper dbHelper;
+    int idUsuarioLogueado = -1;
+    TextView labelBienvenida, labelTotalRecolectado;
     ImageView btnPerfil;
+
+    FloatingActionButton btnNuevaRecoleccion;
 
     ListView listActividades;
     ArrayList<String> listaResiduos;
@@ -38,8 +43,11 @@ public class HomeUsuarioActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this);
 
         labelBienvenida = findViewById(R.id.labelBienvenida);
+        labelTotalRecolectado = findViewById(R.id.labelTotalRecolectado);
         btnPerfil = findViewById(R.id.btnPerfil);
         listActividades = findViewById(R.id.listActividades);
+
+        btnNuevaRecoleccion = findViewById(R.id.btnNuevaRecoleccion);
 
         btnPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,12 +60,10 @@ public class HomeUsuarioActivity extends AppCompatActivity {
         Cursor cursor = dbHelper.obtenerDatosUsuarioLogueado(dni);
 
         if (cursor != null && cursor.moveToFirst()) {
-            int idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario"));
+            idUsuarioLogueado = cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario"));
             String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre_completo"));
 
             labelBienvenida.setText("¡Bienvenido " + nombre + "!");
-
-            cargarListaUsuario(idUsuario);
 
             cursor.close();
         } else {
@@ -67,11 +73,30 @@ public class HomeUsuarioActivity extends AppCompatActivity {
             finish();
         }
 
+        btnNuevaRecoleccion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeUsuarioActivity.this, NuevaRecoleccionActivity.class);
+                startActivity(intent);
+            }
+        });
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (idUsuarioLogueado != -1) {
+            cargarListaUsuario(idUsuarioLogueado);
+
+            double totalHistorico = dbHelper.obtenerTotalHistoricoPorUsuario(idUsuarioLogueado);
+            labelTotalRecolectado.setText("Has recolectado un total de: " + String.format(java.util.Locale.getDefault(), "%.1f", totalHistorico) + " kg");
+        }
     }
 
     // Lógica para llenar la lista

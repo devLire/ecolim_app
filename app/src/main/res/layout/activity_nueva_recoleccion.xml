@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEEEEE"
+    android:fillViewport="true"
+    android:id="@+id/main"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#C5E1A5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/btnRegresar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="#1B5E20" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="ECOLIM S.A.C."
+                android:textColor="#1B5E20"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
+            app:cardBackgroundColor="#FAFAFA"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:text="Nueva Recolección"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zona de limpieza"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    app:boxStrokeColor="#6750A4">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spZona"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:text="Escoja una zona"
+                        android:textColor="#333333" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Categoría de Residuo"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    app:boxStrokeColor="#6750A4">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spCategoria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:text="Escoja un Residuo"
+                        android:textColor="#333333" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#CCCCCC" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginVertical="12dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cantidad (kg / L)"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="#6750A4">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCantidad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:padding="12dp"
+                            android:textColor="#333333" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="kg"
+                        android:textColor="#000000"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAnadirLista"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginVertical="16dp"
+                    android:text="Añadir a la lista"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    app:backgroundTint="#5DAA56"
+                    app:cornerRadius="28dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="8dp"
+                    android:background="#CCCCCC" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="12dp"
+                    android:text="Materiales Añadidos"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TableLayout
+                    android:id="@+id/tablaMateriales"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#6750A4"
+                    android:padding="1dp"
+                    android:stretchColumns="0,1,2,3">
+
+                    <TableRow>
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Zona"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Categoría"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Cantidad"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Acción"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </TableRow>
+
+                    <TableRow android:id="@+id/filaEjemplo">
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Zona 1"
+                            android:textColor="#333333"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="Plástico"
+                            android:textColor="#333333"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp"
+                            android:text="5 kg"
+                            android:textColor="#333333"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_margin="1dp"
+                            android:background="#FAFAFA"
+                            android:gravity="center"
+                            android:padding="8dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@android:drawable/ic_menu_delete"
+                                app:tint="#000000" />
+                        </LinearLayout>
+                    </TableRow>
+                </TableLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#CCCCCC" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGuardarRegistro"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="Guardar Registro"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    app:backgroundTint="#4BC8F5"
+                    app:cornerRadius="28dp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

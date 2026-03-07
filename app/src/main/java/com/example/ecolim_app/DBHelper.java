@@ -163,6 +163,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ?", new String[]{dni});
     }
 
+    // Home - Usuario
+
+    // MÉTODO PARA OBTENER EL TOTAL HISTÓRICO DE UN OPERARIO
+    public double obtenerTotalHistoricoPorUsuario(int idUsuario) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Sumamos las cantidades uniendo el Detalle con el Registro (Cabecera)
+        String query = "SELECT SUM(d.cantidad) FROM " + TABLE_DETALLE + " d " +
+                "INNER JOIN " + TABLE_REGISTRO + " r ON d.id_registro = r.id_registro " +
+                "WHERE r.id_usuario = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(idUsuario)});
+        double total = 0;
+
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0);
+        }
+        cursor.close();
+
+        return total;
+    }
+
     // MÉTODO PARA OBTENER EL HISTORIAL DE UN SOLO USUARIO
 
     public Cursor obtenerRegistrosPorUsuario(int idUsuario) {
@@ -303,7 +325,6 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("id_usuario", idUsuario);
         values.put("id_zona", idZona);
         values.put("fecha_hora", fechaActual);
-        values.put("estado_sincronizacion", 0);
 
         return db.insert(TABLE_REGISTRO, null, values);
     }
