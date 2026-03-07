@@ -106,13 +106,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // 4. Insertar Registros (Cabecera de la recolección)
         // Registro 1: Ernesto (ID 1) limpió el Comedor (ID 2)
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 2, '2023-10-25 08:30:00')"); // ID: 1
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 2, '2026-03-07 08:30:00')"); // ID: 1
         // Registro 2: María (ID 3) limpió el Almacén Principal (ID 1)
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 1, '2023-10-25 09:15:00')"); // ID: 2
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 1, '2026-03-07 09:15:00')"); // ID: 2
         // Registro 3: Ernesto (ID 1) limpió el Patio Trasero (ID 4)
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 4, '2023-10-26 10:00:00')"); // ID: 3
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 4, '2026-03-07 10:00:00')"); // ID: 3
         // Registro 4: María (ID 3) limpió las Oficinas (ID 3)
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 3, '2023-10-26 14:20:00')"); // ID: 4
+        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 3, '2026-03-07 14:20:00')"); // ID: 4
 
         // 5. Insertar Detalles de los Residuos recolectados
         // Detalles del Registro 1 (Comedor): 2.5kg Plástico y 1.2kg Orgánico
