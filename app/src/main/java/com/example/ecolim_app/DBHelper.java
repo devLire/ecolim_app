@@ -391,4 +391,46 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return db.rawQuery(query, null);
     }
+
+    // =========================================================================
+    // MÉTODOS CRUD ZONAS Y ELIMINAR CATEGORÍA
+    // =========================================================================
+
+    // D - Eliminar Categoría
+    public boolean eliminarCategoria(int idCategoria) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = db.delete(TABLE_CATEGORIA, "id_categoria = ?", new String[]{String.valueOf(idCategoria)});
+        return rowsDeleted > 0;
+    }
+
+    // C - Crear Zona
+    public boolean insertarZona(String nombreZona) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("nombre_zona", nombreZona);
+        long result = db.insert(TABLE_ZONA, null, values);
+        return result != -1;
+    }
+
+    // R - Obtener Zonas
+    public Cursor obtenerZonas() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ZONA + " ORDER BY nombre_zona ASC", null);
+    }
+
+    // U - Actualizar Zona
+    public boolean actualizarZona(int idZona, String nombreZona) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("nombre_zona", nombreZona);
+        int rowsAffected = db.update(TABLE_ZONA, values, "id_zona = ?", new String[]{String.valueOf(idZona)});
+        return rowsAffected > 0;
+    }
+
+    // D - Eliminar Zona
+    public boolean eliminarZona(int idZona) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = db.delete(TABLE_ZONA, "id_zona = ?", new String[]{String.valueOf(idZona)});
+        return rowsDeleted > 0;
+    }
 }

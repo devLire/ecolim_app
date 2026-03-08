@@ -19,7 +19,7 @@
             android:name=".AnadirUsuario"
             android:exported="false" />
         <activity
-            android:name=".GestionAdmin"
+            android:name=".GestionAdminActivity"
             android:exported="false" />
         <activity
             android:name=".PantallaReporteAdmin"

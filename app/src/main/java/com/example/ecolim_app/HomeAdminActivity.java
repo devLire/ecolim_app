@@ -36,7 +36,7 @@ public class HomeAdminActivity extends AppCompatActivity {
     DBHelper dbHelper;
 
     // Vistas de la Interfaz
-    ImageView btnPerfilAdmin;
+    ImageView btnPerfil;
     TextView labelBienvenida, labelRecoleccion;
     EditText etFechaDesde, etFechaHasta;
 
@@ -44,7 +44,7 @@ public class HomeAdminActivity extends AppCompatActivity {
     TableLayout tablaDinamica;
     LinearLayout layoutPorcentajes;
 
-    MaterialButton btnReportes;
+    MaterialButton btnReportes, btnGestionDatos;
 
     // Formato de fecha para SQLite y Array de colores para el gráfico
     SimpleDateFormat formatoDB = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -84,12 +84,18 @@ public class HomeAdminActivity extends AppCompatActivity {
         // 6. Dibujamos la tabla y la barra por primera vez
         actualizarTablaDatosDinamica(primerDiaMes, fechaHoy);
 
-        btnReportes = findViewById(R.id.btnReportes);
-
         btnReportes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeAdminActivity.this, PantallaReporteAdmin.class);
+                startActivity(intent);
+            }
+        });
+
+        btnGestionDatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeAdminActivity.this, GestionAdminActivity.class);
                 startActivity(intent);
             }
         });
@@ -102,15 +108,17 @@ public class HomeAdminActivity extends AppCompatActivity {
     }
 
     private void vincularVistas() {
-        btnPerfilAdmin = findViewById(R.id.btnPerfil);
+        btnPerfil = findViewById(R.id.btnPerfil);
         labelBienvenida = findViewById(R.id.labelBienvenida);
         labelRecoleccion = findViewById(R.id.labelRecoleccion);
         etFechaDesde = findViewById(R.id.etFechaDesde);
         etFechaHasta = findViewById(R.id.etFechaHasta);
         tablaDinamica = findViewById(R.id.tablaDinamica);
         layoutPorcentajes = findViewById(R.id.layoutPorcentajes);
+        btnReportes = findViewById(R.id.btnReportes);
+        btnGestionDatos = findViewById(R.id.btnGestionDatos);
 
-        btnPerfilAdmin.setOnClickListener(v -> {
+        btnPerfil.setOnClickListener(v -> {
             startActivity(new Intent(HomeAdminActivity.this, PerfilActivity.class));
         });
     }

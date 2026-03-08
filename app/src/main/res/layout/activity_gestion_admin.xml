@@ -36,11 +36,11 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/btnPerfilAdmin"
+            android:id="@+id/btnPerfil"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@android:drawable/ic_menu_myplaces"
-            app:tint="#1B5E20" />
+            app:srcCompat="@drawable/profile" />
+
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
@@ -49,8 +49,8 @@
         android:layout_height="wrap_content"
         android:background="#FAFAFA"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:tabIndicatorColor="#6750A4"
-        app:tabSelectedTextColor="#6750A4"
+        app:tabIndicatorColor="#1A3100"
+        app:tabSelectedTextColor="#101D00"
         app:tabTextColor="#888888">
 
         <com.google.android.material.tabs.TabItem
@@ -66,7 +66,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Zonas" />
+            android:text="Zonas Limpieza" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.cardview.widget.CardView
@@ -90,8 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Buscar"
-                app:boxStrokeColor="#6A4E9F"
-                app:startIconDrawable="@android:drawable/ic_menu_search">
+                app:boxStrokeColor="#c5e1a5"
+                app:hintTextColor="@color/hint_color_active"
+                app:startIconDrawable="@android:drawable/ic_menu_search"
+                app:startIconTint="@color/hint_color_active">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etBuscadorGestion"
@@ -105,8 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@android:layout/simple_list_item_1" />
-
+                tools:listitem="@layout/item_gestion" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
