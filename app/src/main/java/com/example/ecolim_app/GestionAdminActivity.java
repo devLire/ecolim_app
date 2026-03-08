@@ -1,9 +1,11 @@
 package com.example.ecolim_app;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 public class GestionAdminActivity extends AppCompatActivity {
 
     DBHelper dbHelper;
-    ImageView btnRegresar;
+    ImageView btnRegresar, btnPerfil;
     TabLayout tabLayoutGestion;
     TextInputEditText etBuscadorGestion;
     RecyclerView listaGestion;
@@ -50,7 +52,20 @@ public class GestionAdminActivity extends AppCompatActivity {
         // Cargar los datos de la primera pestaña por defecto
         cargarDatos(0);
 
-        btnRegresar.setOnClickListener(v -> finish());
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GestionAdminActivity.this, PerfilActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // FAB
         btnAgregarGestion.setOnClickListener(v -> {
@@ -72,6 +87,7 @@ public class GestionAdminActivity extends AppCompatActivity {
         etBuscadorGestion = findViewById(R.id.etBuscadorGestion);
         listaGestion = findViewById(R.id.listaGestion);
         btnAgregarGestion = findViewById(R.id.btnAgregarGestion);
+        btnPerfil = findViewById(R.id.btnPerfil);
     }
 
     private void configurarTabs() {
