@@ -19,10 +19,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/btnBack"
+            android:id="@+id/btnRegresar"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_back" /> <TextView
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#1B5E20" />
+
+        <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -37,6 +40,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             app:srcCompat="@drawable/profile" />
+
     </LinearLayout>
 
     <ScrollView

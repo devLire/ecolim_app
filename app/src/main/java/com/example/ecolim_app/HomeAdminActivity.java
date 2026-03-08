@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +43,8 @@ public class HomeAdminActivity extends AppCompatActivity {
     // Contenedores Dinámicos
     TableLayout tablaDinamica;
     LinearLayout layoutPorcentajes;
+
+    MaterialButton btnReportes;
 
     // Formato de fecha para SQLite y Array de colores para el gráfico
     SimpleDateFormat formatoDB = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -78,6 +83,16 @@ public class HomeAdminActivity extends AppCompatActivity {
 
         // 6. Dibujamos la tabla y la barra por primera vez
         actualizarTablaDatosDinamica(primerDiaMes, fechaHoy);
+
+        btnReportes = findViewById(R.id.btnReportes);
+
+        btnReportes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeAdminActivity.this, PantallaReporteAdmin.class);
+                startActivity(intent);
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

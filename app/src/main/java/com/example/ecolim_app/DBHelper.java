@@ -234,6 +234,40 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{fechaDesde, fechaHasta});
     }
 
+    // Pantalla Reporte
+    // MÉTODO PARA REPORTES FILTRADOS MULTICRITERIO
+    public Cursor obtenerReportesFiltrados(String fechaDesde, String fechaHasta, int idCategoria, int idZona) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        StringBuilder query = new StringBuilder(
+                "SELECT c.nombre_categoria, d.cantidad, z.nombre_zona, r.fecha_hora, u.nombre_completo " +
+                        "FROM " + TABLE_DETALLE + " d " +
+                        "INNER JOIN " + TABLE_REGISTRO + " r ON d.id_registro = r.id_registro " +
+                        "INNER JOIN " + TABLE_CATEGORIA + " c ON d.id_categoria = c.id_categoria " +
+                        "INNER JOIN " + TABLE_ZONA + " z ON r.id_zona = z.id_zona " +
+                        "INNER JOIN " + TABLE_USUARIO + " u ON r.id_usuario = u.id_usuario " +
+                        "WHERE date(r.fecha_hora) BETWEEN ? AND ? "
+        );
+
+        java.util.ArrayList<String> args = new java.util.ArrayList<>();
+        args.add(fechaDesde);
+        args.add(fechaHasta);
+
+        // Si el id es > 0, filtramos. Si es 0, significa "Todos", así que ignoramos el filtro.
+        if (idCategoria > 0) {
+            query.append("AND c.id_categoria = ? ");
+            args.add(String.valueOf(idCategoria));
+        }
+        if (idZona > 0) {
+            query.append("AND z.id_zona = ? ");
+            args.add(String.valueOf(idZona));
+        }
+
+        query.append("ORDER BY r.fecha_hora DESC");
+
+        return db.rawQuery(query.toString(), args.toArray(new String[0]));
+    }
+
 
     // =========================================================================
     // MÉTODOS CRUD - TABLA USUARIO (Uso exclusivo del Supervisor)

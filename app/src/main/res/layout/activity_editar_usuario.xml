@@ -18,10 +18,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/btnBack"
+            android:id="@+id/btnRegresar"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_back" />
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#1B5E20" />
 
         <TextView
             android:layout_width="0dp"
