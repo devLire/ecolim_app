@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Login"
         tools:targetApi="31">
         <activity
+            android:name=".FormUsuarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditarUsuario"
             android:exported="false" />
         <activity

@@ -69,7 +69,10 @@ public class GestionAdminActivity extends AppCompatActivity {
 
         // FAB
         btnAgregarGestion.setOnClickListener(v -> {
-            Toast.makeText(this, "Abrir modal para agregar (Tab: " + tabActual + ")", Toast.LENGTH_SHORT).show();
+            if (tabActual == 0) { // 0 = Usuarios
+                Intent intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
+                startActivity(intent);
+            }
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -79,6 +82,12 @@ public class GestionAdminActivity extends AppCompatActivity {
             }
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarDatos(tabActual);
     }
 
     private void vincularVistas() {
@@ -160,7 +169,11 @@ public class GestionAdminActivity extends AppCompatActivity {
 
         // Configurar el Adapter
         adapter = new GestionAdapter(listaDatos, item -> {
-            Toast.makeText(this, "Editar item con ID: " + item.getId(), Toast.LENGTH_SHORT).show();
+            if (tabActual == 0) { // 0 = Usuarios
+                Intent intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
+                intent.putExtra("ID_USUARIO_EDITAR", item.getId());
+                startActivity(intent);
+            }
         });
 
         listaGestion.setAdapter(adapter);

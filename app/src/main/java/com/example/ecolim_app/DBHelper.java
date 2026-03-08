@@ -315,6 +315,29 @@ public class DBHelper extends SQLiteOpenHelper {
         return rowsDeleted > 0;
     }
 
+    // MÉTODO DE VALIDACIÓN (VERIFICAR SI UN DNI YA EXISTE)
+    public boolean existeDNI(String dni, int idUsuarioActual) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query;
+        String[] args;
+
+        if (idUsuarioActual == -1) {
+            // MODO AÑADIR
+            query = "SELECT 1 FROM " + TABLE_USUARIO + " WHERE dni = ?";
+            args = new String[]{dni};
+        } else {
+            // MODO EDITAR
+            query = "SELECT 1 FROM " + TABLE_USUARIO + " WHERE dni = ? AND id_usuario != ?";
+            args = new String[]{dni, String.valueOf(idUsuarioActual)};
+        }
+
+        Cursor cursor = db.rawQuery(query, args);
+        boolean existe = cursor.getCount() > 0;
+        cursor.close();
+
+        return existe;
+    }
+
     // =========================================================================
     // MÉTODOS CRUD - TABLA CATEGORÍA (Catálogo dinámico)
     // =========================================================================
