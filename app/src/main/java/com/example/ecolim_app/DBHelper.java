@@ -105,28 +105,17 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Patio Trasero', 'Exterior')"); // ID: 4
 
         // 4. Insertar Registros (Cabecera de la recolección)
-        // Registro 1: Ernesto (ID 1) limpió el Comedor (ID 2)
         db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 2, '2026-03-07 08:30:00')"); // ID: 1
-        // Registro 2: María (ID 3) limpió el Almacén Principal (ID 1)
         db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 1, '2026-03-07 09:15:00')"); // ID: 2
-        // Registro 3: Ernesto (ID 1) limpió el Patio Trasero (ID 4)
         db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 4, '2026-03-07 10:00:00')"); // ID: 3
-        // Registro 4: María (ID 3) limpió las Oficinas (ID 3)
         db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 3, '2026-03-07 14:20:00')"); // ID: 4
 
         // 5. Insertar Detalles de los Residuos recolectados
-        // Detalles del Registro 1 (Comedor): 2.5kg Plástico y 1.2kg Orgánico
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (1, 1, 2.5)");
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (1, 2, 1.2)");
-
-        // Detalles del Registro 2 (Almacén): 5.0kg Papel
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (2, 3, 5.0)");
-
-        // Detalles del Registro 3 (Patio Trasero): 2.0 Litros Peligroso y 1.5kg Plástico
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (3, 4, 2.0)");
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (3, 1, 1.5)");
-
-        // Detalles del Registro 4 (Oficinas): 3.0kg Papel y 0.5kg Orgánico
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (4, 3, 3.0)");
         db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (4, 2, 0.5)");
     }
@@ -142,56 +131,39 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // MÉTODO PARA EL LOGIN
-
     public boolean verificarCredenciales(String dniIngresado, String passIngresada) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Buscamos si existe un registro que coincida con el DNI y Contraseña ingresados
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ? AND contrasena = ?", new String[]{dniIngresado, passIngresada});
-
-        boolean existe = cursor.getCount() > 0; // Si retorna 1 es porque fue una autenticación correcta (DNI y contraseña existen)
+        // Solo permite loguearse si activo = 1
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ? AND contrasena = ? AND activo = 1", new String[]{dniIngresado, passIngresada});
+        boolean existe = cursor.getCount() > 0;
         cursor.close();
-
         return existe;
     }
 
     // MÉTODO PARA OBTENER DATOS DEL USUARIO LOGUEADO
     public Cursor obtenerDatosUsuarioLogueado(String dni) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Consultamos todos los campos del usuario que coincida con el DNI ingresado
         return db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " WHERE dni = ?", new String[]{dni});
     }
 
     // Home - Usuario
 
-    // MÉTODO PARA OBTENER EL TOTAL HISTÓRICO DE UN OPERARIO
     public double obtenerTotalHistoricoPorUsuario(int idUsuario) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Sumamos las cantidades uniendo el Detalle con el Registro (Cabecera)
         String query = "SELECT SUM(d.cantidad) FROM " + TABLE_DETALLE + " d " +
                 "INNER JOIN " + TABLE_REGISTRO + " r ON d.id_registro = r.id_registro " +
                 "WHERE r.id_usuario = ?";
-
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(idUsuario)});
         double total = 0;
-
         if (cursor.moveToFirst()) {
             total = cursor.getDouble(0);
         }
         cursor.close();
-
         return total;
     }
 
-    // MÉTODO PARA OBTENER EL HISTORIAL DE UN SOLO USUARIO
-
     public Cursor obtenerRegistrosPorUsuario(int idUsuario) {
         SQLiteDatabase db = this.getReadableDatabase();
-
-        // Traemos el nombre de la categoría, cantidad, zona y fecha.
-        // Filtramos por id_usuario y ordenamos de mayor a menor (DESC)
         String query = "SELECT c.nombre_categoria, d.cantidad, z.nombre_zona, r.fecha_hora " +
                 "FROM " + TABLE_REGISTRO + " r " +
                 "INNER JOIN " + TABLE_DETALLE + " d ON r.id_registro = d.id_registro " +
@@ -199,19 +171,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 "INNER JOIN " + TABLE_ZONA + " z ON r.id_zona = z.id_zona " +
                 "WHERE r.id_usuario = ? " +
                 "ORDER BY r.id_registro DESC";
-
         return db.rawQuery(query, new String[]{String.valueOf(idUsuario)});
     }
 
     // Home - Admin
 
-    // 1. Obtener el total de kg recolectados en una fecha específica
     public double obtenerTotalKilosPorFecha(String fecha) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT SUM(d.cantidad) FROM " + TABLE_DETALLE + " d " +
                 "INNER JOIN " + TABLE_REGISTRO + " r ON d.id_registro = r.id_registro " +
                 "WHERE date(r.fecha_hora) = ?";
-
         Cursor cursor = db.rawQuery(query, new String[]{fecha});
         double total = 0;
         if (cursor.moveToFirst()) {
@@ -221,7 +190,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return total;
     }
 
-    // 2. Obtener los kilos agrupados por categoría en un rango de fechas
     public Cursor obtenerKilosPorCategoriaRango(String fechaDesde, String fechaHasta) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT c.nombre_categoria, SUM(d.cantidad) as total_kg " +
@@ -230,15 +198,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 "INNER JOIN " + TABLE_CATEGORIA + " c ON d.id_categoria = c.id_categoria " +
                 "WHERE date(r.fecha_hora) BETWEEN ? AND ? " +
                 "GROUP BY c.id_categoria";
-
         return db.rawQuery(query, new String[]{fechaDesde, fechaHasta});
     }
 
     // Pantalla Reporte
-    // MÉTODO PARA REPORTES FILTRADOS MULTICRITERIO
     public Cursor obtenerReportesFiltrados(String fechaDesde, String fechaHasta, int idCategoria, int idZona) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         StringBuilder query = new StringBuilder(
                 "SELECT c.nombre_categoria, d.cantidad, z.nombre_zona, r.fecha_hora, u.nombre_completo " +
                         "FROM " + TABLE_DETALLE + " d " +
@@ -253,7 +218,6 @@ public class DBHelper extends SQLiteOpenHelper {
         args.add(fechaDesde);
         args.add(fechaHasta);
 
-        // Si el id es > 0, filtramos. Si es 0, significa "Todos", así que ignoramos el filtro.
         if (idCategoria > 0) {
             query.append("AND c.id_categoria = ? ");
             args.add(String.valueOf(idCategoria));
@@ -264,181 +228,162 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         query.append("ORDER BY r.fecha_hora DESC");
-
         return db.rawQuery(query.toString(), args.toArray(new String[0]));
     }
 
 
     // =========================================================================
-    // MÉTODOS CRUD - TABLA USUARIO (Uso exclusivo del Supervisor)
+    // MÉTODOS CRUD - TABLA USUARIO
     // =========================================================================
 
-    // C - Crear Usuario
     public boolean insertarUsuario(String nombreCompleto, String dni, String contrasena, String rol) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put("nombre_completo", nombreCompleto);
         values.put("dni", dni);
         values.put("contrasena", contrasena);
-        values.put("rol", rol); // Debe ser 'Operario' o 'Supervisor'
-
+        values.put("rol", rol);
         long result = db.insert(TABLE_USUARIO, null, values);
         return result != -1;
     }
 
-    // R - Obtener todos los Usuarios
+    // R - Obtener TODOS los Usuarios (Para Gestión Admin, muestra activos e inactivos)
     public Cursor obtenerUsuarios() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_USUARIO + " ORDER BY nombre_completo ASC", null);
     }
 
-    // U - Actualizar datos de un Usuario
     public boolean actualizarUsuario(int idUsuario, String nombreCompleto, String dni, String contrasena, String rol, boolean activo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put("nombre_completo", nombreCompleto);
         values.put("dni", dni);
         values.put("contrasena", contrasena);
         values.put("rol", rol);
-        values.put("activo", activo ? 1 : 0); // 1 = Activo, 0 = Inactivo
-
+        values.put("activo", activo ? 1 : 0);
         int rowsAffected = db.update(TABLE_USUARIO, values, "id_usuario = ?", new String[]{String.valueOf(idUsuario)});
         return rowsAffected > 0;
     }
 
-    // MÉTODO DE VALIDACIÓN (VERIFICAR SI UN DNI YA EXISTE)
     public boolean existeDNI(String dni, int idUsuarioActual) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query;
         String[] args;
-
         if (idUsuarioActual == -1) {
-            // MODO AÑADIR
             query = "SELECT 1 FROM " + TABLE_USUARIO + " WHERE dni = ?";
             args = new String[]{dni};
         } else {
-            // MODO EDITAR
             query = "SELECT 1 FROM " + TABLE_USUARIO + " WHERE dni = ? AND id_usuario != ?";
             args = new String[]{dni, String.valueOf(idUsuarioActual)};
         }
-
         Cursor cursor = db.rawQuery(query, args);
         boolean existe = cursor.getCount() > 0;
         cursor.close();
-
         return existe;
     }
 
     // =========================================================================
-    // MÉTODOS CRUD - TABLA CATEGORÍA (Catálogo dinámico)
+    // MÉTODOS CRUD - TABLA CATEGORÍA
     // =========================================================================
 
-    // C - Crear nueva categoría de residuo
     public boolean insertarCategoria(String nombreCategoria, String unidadMedida) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put("nombre_categoria", nombreCategoria);
-        values.put("unidad_medida", unidadMedida); // 'Kg', 'Litros', 'Unidades'
-
+        values.put("unidad_medida", unidadMedida);
         long result = db.insert(TABLE_CATEGORIA, null, values);
         return result != -1;
     }
 
-    // R - Obtener categorías
+    // R - Obtener TODAS las categorías (Para Gestión Admin y Reportes)
     public Cursor obtenerCategorias() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_CATEGORIA + " ORDER BY nombre_categoria ASC", null);
     }
 
-    // U - Actualizar categoría
     public boolean actualizarCategoria(int idCategoria, String nombreCategoria, String unidadMedida, boolean activo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put("nombre_categoria", nombreCategoria);
         values.put("unidad_medida", unidadMedida);
-        values.put("activo", activo ? 1 : 0); // Guardamos 1 o 0
-
+        values.put("activo", activo ? 1 : 0);
         int rowsAffected = db.update(TABLE_CATEGORIA, values, "id_categoria = ?", new String[]{String.valueOf(idCategoria)});
         return rowsAffected > 0;
-    }
-
-    // PASO 1: Insertar la Cabecera
-    public long insertarRegistroCabecera(int idUsuario, int idZona) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        String fechaActual = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-
-        values.put("id_usuario", idUsuario);
-        values.put("id_zona", idZona);
-        values.put("fecha_hora", fechaActual);
-
-        return db.insert(TABLE_REGISTRO, null, values);
-    }
-
-    // PASO 2: Insertar el Detalle
-    public boolean insertarDetalleResiduo(long idRegistro, int idCategoria, double cantidad) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put("id_registro", idRegistro);
-        values.put("id_categoria", idCategoria);
-        values.put("cantidad", cantidad);
-
-        long result = db.insert(TABLE_DETALLE, null, values);
-        return result != -1;
-    }
-
-    // =========================================================================
-    // MÉTODOS CRUD - LECTURA DE REGISTROS - HomeActivity
-    // =========================================================================
-
-    public Cursor obtenerRegistrosCompletos() {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // Hacemos un JOIN simple para unir la cabecera (fecha, usuario, zona) con el detalle (cantidad, categoría)
-        String query = "SELECT r.id_registro, r.id_usuario, d.id_categoria, d.cantidad, r.fecha_hora, r.id_zona " +
-                "FROM " + TABLE_REGISTRO + " r " +
-                "INNER JOIN " + TABLE_DETALLE + " d ON r.id_registro = d.id_registro " +
-                "ORDER BY r.id_registro DESC";
-
-        return db.rawQuery(query, null);
     }
 
     // =========================================================================
     // MÉTODOS CRUD ZONAS
     // =========================================================================
 
-    // C - Crear Zona
     public boolean insertarZona(String nombreZona, String ubicacionEspecifica) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("nombre_zona", nombreZona);
         values.put("ubicacion_especifica", ubicacionEspecifica);
-
         long result = db.insert(TABLE_ZONA, null, values);
         return result != -1;
     }
 
-    // R - Obtener Zonas
+    // R - Obtener TODAS las Zonas (Para Gestión Admin y Reportes)
     public Cursor obtenerZonas() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_ZONA + " ORDER BY nombre_zona ASC", null);
     }
 
-    // U - Actualizar Zona
     public boolean actualizarZona(int idZona, String nombreZona, String ubicacionEspecifica, boolean activo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("nombre_zona", nombreZona);
         values.put("ubicacion_especifica", ubicacionEspecifica);
         values.put("activo", activo ? 1 : 0);
-
         int rowsAffected = db.update(TABLE_ZONA, values, "id_zona = ?", new String[]{String.valueOf(idZona)});
         return rowsAffected > 0;
+    }
+
+    // =========================================================================
+    // MÉTODOS DE REGISTRO / DETALLE
+    // =========================================================================
+
+    public long insertarRegistroCabecera(int idUsuario, int idZona) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String fechaActual = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+        values.put("id_usuario", idUsuario);
+        values.put("id_zona", idZona);
+        values.put("fecha_hora", fechaActual);
+        return db.insert(TABLE_REGISTRO, null, values);
+    }
+
+    public boolean insertarDetalleResiduo(long idRegistro, int idCategoria, double cantidad) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("id_registro", idRegistro);
+        values.put("id_categoria", idCategoria);
+        values.put("cantidad", cantidad);
+        long result = db.insert(TABLE_DETALLE, null, values);
+        return result != -1;
+    }
+
+    public Cursor obtenerRegistrosCompletos() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT r.id_registro, r.id_usuario, d.id_categoria, d.cantidad, r.fecha_hora, r.id_zona " +
+                "FROM " + TABLE_REGISTRO + " r " +
+                "INNER JOIN " + TABLE_DETALLE + " d ON r.id_registro = d.id_registro " +
+                "ORDER BY r.id_registro DESC";
+        return db.rawQuery(query, null);
+    }
+
+    // =========================================================================
+    // MÉTODOS EXCLUSIVOS PARA EL OPERARIO (NUEVA RECOLECCIÓN - SOLO ACTIVOS)
+    // =========================================================================
+
+    public Cursor obtenerCategoriasActivas() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_CATEGORIA + " WHERE activo = 1 ORDER BY nombre_categoria ASC", null);
+    }
+
+    public Cursor obtenerZonasActivas() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ZONA + " WHERE activo = 1 ORDER BY nombre_zona ASC", null);
     }
 }

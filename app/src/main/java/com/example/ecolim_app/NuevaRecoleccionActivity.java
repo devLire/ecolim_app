@@ -136,11 +136,11 @@ public class NuevaRecoleccionActivity extends AppCompatActivity {
 
     private void cargarDatosComboBox() {
         // Cargar Zonas
-        Cursor cZonas = dbHelper.getReadableDatabase().rawQuery("SELECT id_zona, nombre_zona FROM " + DBHelper.TABLE_ZONA + " ORDER BY nombre_zona ASC", null);
+        Cursor cZonas = dbHelper.obtenerZonasActivas();
         if (cZonas != null) {
             while (cZonas.moveToNext()) {
-                idsZonas.add(cZonas.getInt(0));
-                nombresZonas.add(cZonas.getString(1));
+                idsZonas.add(cZonas.getInt(cZonas.getColumnIndexOrThrow("id_zona")));
+                nombresZonas.add(cZonas.getString(cZonas.getColumnIndexOrThrow("nombre_zona")));
             }
             cZonas.close();
         }
@@ -153,7 +153,7 @@ public class NuevaRecoleccionActivity extends AppCompatActivity {
         });
 
         // Cargar Categorías
-        Cursor cCategorias = dbHelper.obtenerCategorias();
+        Cursor cCategorias = dbHelper.obtenerCategoriasActivas();
         if (cCategorias != null) {
             while (cCategorias.moveToNext()) {
                 idsCategorias.add(cCategorias.getInt(cCategorias.getColumnIndexOrThrow("id_categoria")));
