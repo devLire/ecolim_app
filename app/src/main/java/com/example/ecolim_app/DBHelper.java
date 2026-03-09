@@ -361,12 +361,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // U - Actualizar categoría
-    public boolean actualizarCategoria(int idCategoria, String nombreCategoria, String unidadMedida) {
+    public boolean actualizarCategoria(int idCategoria, String nombreCategoria, String unidadMedida, boolean activo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put("nombre_categoria", nombreCategoria);
         values.put("unidad_medida", unidadMedida);
+        values.put("activo", activo ? 1 : 0); // Guardamos 1 o 0
 
         int rowsAffected = db.update(TABLE_CATEGORIA, values, "id_categoria = ?", new String[]{String.valueOf(idCategoria)});
         return rowsAffected > 0;

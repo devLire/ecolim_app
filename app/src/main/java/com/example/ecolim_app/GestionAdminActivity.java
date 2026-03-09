@@ -73,6 +73,10 @@ public class GestionAdminActivity extends AppCompatActivity {
                 Intent intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
                 startActivity(intent);
             }
+            if (tabActual == 1) { // 1 = Categorías
+                Intent intent = new Intent(GestionAdminActivity.this, FormCategoriaActivity.class);
+                startActivity(intent);
+            }
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -172,6 +176,11 @@ public class GestionAdminActivity extends AppCompatActivity {
             if (tabActual == 0) { // 0 = Usuarios
                 Intent intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
                 intent.putExtra("ID_USUARIO_EDITAR", item.getId());
+                startActivity(intent);
+            }
+            if (tabActual == 1) { // 1 = Categorías
+                Intent intent = new Intent(GestionAdminActivity.this, FormCategoriaActivity.class);
+                intent.putExtra("ID_CATEGORIA_EDITAR", item.getId());
                 startActivity(intent);
             }
         });

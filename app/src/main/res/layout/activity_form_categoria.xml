@@ -54,19 +54,19 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/imageViewLogo"
                 android:layout_width="220dp"
                 android:layout_height="220dp"
                 app:srcCompat="@drawable/empresa_logo" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvTituloFormularioUsuario"
+            android:id="@+id/tvTituloFormularioCategoria"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="Nuevo Usuario"
+            android:text="Nueva Categoría"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -83,51 +83,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Nombre"
+                android:hint="Nombre de la Categoría (Ej: Plástico)"
                 app:boxStrokeColor="#A5D6A7"
                 app:hintTextColor="#388E3C">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etNombreUsuarioForm"
+                    android:id="@+id/etNombreCategoriaForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:textColor="#333333" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="DNI"
-                app:boxStrokeColor="#A5D6A7"
-                app:hintTextColor="#388E3C">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDniUsuarioForm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="20"
-                    android:textColor="#333333" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Contraseña"
-                app:boxStrokeColor="#A5D6A7"
-                app:hintTextColor="#388E3C"
-                app:passwordToggleEnabled="true">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPassUsuarioForm"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
+                    android:inputType="textCapSentences"
+                    android:maxLength="25"
                     android:textColor="#333333" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,12 +101,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:hint="Rol"
+                android:hint="Unidad de Medida"
                 app:boxStrokeColor="#A5D6A7"
                 app:hintTextColor="#388E3C">
 
                 <AutoCompleteTextView
-                    android:id="@+id/spRolUsuarioForm"
+                    android:id="@+id/spUnidadMedidaForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -149,7 +114,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilEstadoUsuarioForm"
+                android:id="@+id/tilEstadoCategoriaForm"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,7 +124,7 @@
                 app:hintTextColor="#388E3C">
 
                 <AutoCompleteTextView
-                    android:id="@+id/spEstadoUsuarioForm"
+                    android:id="@+id/spEstadoCategoriaForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
@@ -169,13 +134,13 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAccionUsuario"
+            android:id="@+id/btnAccionCategoria"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"
             android:paddingHorizontal="32dp"
-            android:text="Añadir Usuario"
+            android:text="Añadir Categoría"
             android:textAllCaps="false"
             android:textColor="#000000"
             android:textSize="16sp"

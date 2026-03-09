@@ -145,8 +145,12 @@ public class FormUsuarioActivity extends AppCompatActivity {
             return;
         }
 
-        if (dni.length() != 8) {
-            Toast.makeText(this, "El DNI debe tener exactamente 8 dígitos", Toast.LENGTH_SHORT).show();
+        if (dni.length() < 8) {
+            Toast.makeText(this, "El DNI debe tener mínimo 8 dígitos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (dni.length() > 21) {
+            Toast.makeText(this, "El DNI debe tener máximo 20 dígitos", Toast.LENGTH_SHORT).show();
             return;
         }
 
