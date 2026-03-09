@@ -308,13 +308,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return rowsAffected > 0;
     }
 
-    // D - Eliminar Usuario
-    public boolean eliminarUsuario(int idUsuario) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete(TABLE_USUARIO, "id_usuario = ?", new String[]{String.valueOf(idUsuario)});
-        return rowsDeleted > 0;
-    }
-
     // MÉTODO DE VALIDACIÓN (VERIFICAR SI UN DNI YA EXISTE)
     public boolean existeDNI(String dni, int idUsuarioActual) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -417,21 +410,16 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // =========================================================================
-    // MÉTODOS CRUD ZONAS Y ELIMINAR CATEGORÍA
+    // MÉTODOS CRUD ZONAS
     // =========================================================================
 
-    // D - Eliminar Categoría
-    public boolean eliminarCategoria(int idCategoria) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete(TABLE_CATEGORIA, "id_categoria = ?", new String[]{String.valueOf(idCategoria)});
-        return rowsDeleted > 0;
-    }
-
     // C - Crear Zona
-    public boolean insertarZona(String nombreZona) {
+    public boolean insertarZona(String nombreZona, String ubicacionEspecifica) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("nombre_zona", nombreZona);
+        values.put("ubicacion_especifica", ubicacionEspecifica);
+
         long result = db.insert(TABLE_ZONA, null, values);
         return result != -1;
     }
@@ -443,18 +431,14 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // U - Actualizar Zona
-    public boolean actualizarZona(int idZona, String nombreZona) {
+    public boolean actualizarZona(int idZona, String nombreZona, String ubicacionEspecifica, boolean activo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("nombre_zona", nombreZona);
+        values.put("ubicacion_especifica", ubicacionEspecifica);
+        values.put("activo", activo ? 1 : 0);
+
         int rowsAffected = db.update(TABLE_ZONA, values, "id_zona = ?", new String[]{String.valueOf(idZona)});
         return rowsAffected > 0;
-    }
-
-    // D - Eliminar Zona
-    public boolean eliminarZona(int idZona) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete(TABLE_ZONA, "id_zona = ?", new String[]{String.valueOf(idZona)});
-        return rowsDeleted > 0;
     }
 }

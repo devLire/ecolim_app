@@ -68,13 +68,17 @@ public class GestionAdminActivity extends AppCompatActivity {
         });
 
         // FAB
-        btnAgregarGestion.setOnClickListener(v -> {
-            if (tabActual == 0) { // 0 = Usuarios
-                Intent intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
-                startActivity(intent);
-            }
-            if (tabActual == 1) { // 1 = Categorías
-                Intent intent = new Intent(GestionAdminActivity.this, FormCategoriaActivity.class);
+        btnAgregarGestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                if (tabActual == 0) {
+                    intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
+                } else if (tabActual == 1) {
+                    intent = new Intent(GestionAdminActivity.this, FormCategoriaActivity.class);
+                } else {
+                    intent = new Intent(GestionAdminActivity.this, FormZonaActivity.class);
+                }
                 startActivity(intent);
             }
         });
@@ -172,15 +176,20 @@ public class GestionAdminActivity extends AppCompatActivity {
         if (cursor != null) cursor.close();
 
         // Configurar el Adapter
-        adapter = new GestionAdapter(listaDatos, item -> {
-            if (tabActual == 0) { // 0 = Usuarios
-                Intent intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
-                intent.putExtra("ID_USUARIO_EDITAR", item.getId());
-                startActivity(intent);
-            }
-            if (tabActual == 1) { // 1 = Categorías
-                Intent intent = new Intent(GestionAdminActivity.this, FormCategoriaActivity.class);
-                intent.putExtra("ID_CATEGORIA_EDITAR", item.getId());
+        adapter = new GestionAdapter(listaDatos, new GestionAdapter.OnItemEditListener() {
+            @Override
+            public void onEditClick(ItemGestion item) {
+                Intent intent;
+                if (tabActual == 0) {
+                    intent = new Intent(GestionAdminActivity.this, FormUsuarioActivity.class);
+                    intent.putExtra("ID_USUARIO_EDITAR", item.getId());
+                } else if (tabActual == 1) {
+                    intent = new Intent(GestionAdminActivity.this, FormCategoriaActivity.class);
+                    intent.putExtra("ID_CATEGORIA_EDITAR", item.getId());
+                } else {
+                    intent = new Intent(GestionAdminActivity.this, FormZonaActivity.class);
+                    intent.putExtra("ID_ZONA_EDITAR", item.getId());
+                }
                 startActivity(intent);
             }
         });
