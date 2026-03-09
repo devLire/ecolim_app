@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class FormUsuarioActivity extends AppCompatActivity {
 
@@ -25,7 +26,8 @@ public class FormUsuarioActivity extends AppCompatActivity {
     ImageView btnRegresar;
     TextView tvTituloFormularioUsuario;
     TextInputEditText etNombreUsuarioForm, etDniUsuarioForm, etPassUsuarioForm;
-    AutoCompleteTextView spRolUsuarioForm;
+    AutoCompleteTextView spRolUsuarioForm, spEstadoUsuarioForm;
+    TextInputLayout tilEstadoUsuarioForm;
     MaterialButton btnAccionUsuario;
 
     int idUsuarioModificar = -1;
@@ -39,7 +41,7 @@ public class FormUsuarioActivity extends AppCompatActivity {
         try {
             dbHelper = new DBHelper(this);
             vincularVistas();
-            configurarDropdownRoles();
+            configurarDropdowns();
 
             btnRegresar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -48,7 +50,7 @@ public class FormUsuarioActivity extends AppCompatActivity {
                 }
             });
 
-            // 4. VERIFICAR MODO
+            // VERIFICAR MODO
             verificarModoEdicion();
 
             btnAccionUsuario.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +65,10 @@ public class FormUsuarioActivity extends AppCompatActivity {
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            if (v != null) {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            }
             return insets;
         });
     }
@@ -76,40 +80,55 @@ public class FormUsuarioActivity extends AppCompatActivity {
         etDniUsuarioForm = findViewById(R.id.etDniUsuarioForm);
         etPassUsuarioForm = findViewById(R.id.etPassUsuarioForm);
         spRolUsuarioForm = findViewById(R.id.spRolUsuarioForm);
+        spEstadoUsuarioForm = findViewById(R.id.spEstadoUsuarioForm);
+        tilEstadoUsuarioForm = findViewById(R.id.tilEstadoUsuarioForm);
         btnAccionUsuario = findViewById(R.id.btnAccionUsuario);
     }
 
-    private void configurarDropdownRoles() {
-        // Los roles son fijos según tu lógica de negocio
+    private void configurarDropdowns() {
+        // Dropdown de Roles
         String[] roles = new String[]{"Operario", "Supervisor"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, roles);
-        spRolUsuarioForm.setAdapter(adapter);
+        ArrayAdapter<String> adapterRoles = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, roles);
+        spRolUsuarioForm.setAdapter(adapterRoles);
+
+        // Dropdown de Estados
+        String[] estados = new String[]{"Activo", "Inactivo"};
+        ArrayAdapter<String> adapterEstados = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, estados);
+        spEstadoUsuarioForm.setAdapter(adapterEstados);
     }
 
     private void verificarModoEdicion() {
         // Recibimos el intent
         if (getIntent().hasExtra("ID_USUARIO_EDITAR")) {
             idUsuarioModificar = getIntent().getIntExtra("ID_USUARIO_EDITAR", -1);
+        }
 
-            if (idUsuarioModificar != -1) {
-                // MODO EDICIÓN
-                tvTituloFormularioUsuario.setText("Editar Usuario");
-                btnAccionUsuario.setText("Editar Usuario");
+        if (idUsuarioModificar == -1) {
+            // MODO AÑADIR: Ocultar el campo de estado
+            tilEstadoUsuarioForm.setVisibility(View.GONE);
+        } else {
+            // MODO EDICIÓN: Mostrar el campo de estado
+            tilEstadoUsuarioForm.setVisibility(View.VISIBLE);
+            tvTituloFormularioUsuario.setText("Editar Usuario");
+            btnAccionUsuario.setText("Editar Usuario");
 
-                // BUSCAMOS LOS DATOS EN LA BD PARA RELLENAR LOS CAMPOS
-                Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-                        "SELECT * FROM " + DBHelper.TABLE_USUARIO + " WHERE id_usuario = ?",
-                        new String[]{String.valueOf(idUsuarioModificar)});
+            // BUSCAMOS LOS DATOS EN LA BD PARA RELLENAR LOS CAMPOS
+            Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
+                    "SELECT * FROM " + DBHelper.TABLE_USUARIO + " WHERE id_usuario = ?",
+                    new String[]{String.valueOf(idUsuarioModificar)});
 
-                if (cursor != null && cursor.moveToFirst()) {
-                    etNombreUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("nombre_completo")));
-                    etDniUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("dni")));
-                    etPassUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("contrasena")));
+            if (cursor != null && cursor.moveToFirst()) {
+                etNombreUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("nombre_completo")));
+                etDniUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("dni")));
+                etPassUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("contrasena")));
 
-                    spRolUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("rol")), false);
+                spRolUsuarioForm.setText(cursor.getString(cursor.getColumnIndexOrThrow("rol")), false);
 
-                    cursor.close();
-                }
+                // Configurar el estado actual
+                int activo = cursor.getInt(cursor.getColumnIndexOrThrow("activo"));
+                spEstadoUsuarioForm.setText(activo == 1 ? "Activo" : "Inactivo", false);
+
+                cursor.close();
             }
         }
     }
@@ -122,7 +141,7 @@ public class FormUsuarioActivity extends AppCompatActivity {
 
         // Validaciones básicas
         if (nombre.isEmpty() || dni.isEmpty() || pass.isEmpty() || rol.isEmpty()) {
-            Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Por favor, completa todos los campos requeridos", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -140,14 +159,17 @@ public class FormUsuarioActivity extends AppCompatActivity {
         boolean exito;
 
         if (idUsuarioModificar == -1) {
-            // MODO AÑADIR
+            // MODO AÑADIR (La BD asignará Activo=1 por defecto)
             exito = dbHelper.insertarUsuario(nombre, dni, pass, rol);
             if (exito) {
                 Toast.makeText(this, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show();
             }
         } else {
             // MODO EDITAR
-            exito = dbHelper.actualizarUsuario(idUsuarioModificar, nombre, dni, pass, rol);
+            String estadoTxt = spEstadoUsuarioForm.getText().toString();
+            boolean isActivo = estadoTxt.equals("Activo");
+
+            exito = dbHelper.actualizarUsuario(idUsuarioModificar, nombre, dni, pass, rol, isActivo);
             if (exito) {
                 Toast.makeText(this, "Usuario actualizado exitosamente", Toast.LENGTH_SHORT).show();
             }

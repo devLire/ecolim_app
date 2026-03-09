@@ -294,7 +294,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     // U - Actualizar datos de un Usuario
-    public boolean actualizarUsuario(int idUsuario, String nombreCompleto, String dni, String contrasena, String rol) {
+    public boolean actualizarUsuario(int idUsuario, String nombreCompleto, String dni, String contrasena, String rol, boolean activo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -302,8 +302,8 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put("dni", dni);
         values.put("contrasena", contrasena);
         values.put("rol", rol);
+        values.put("activo", activo ? 1 : 0); // 1 = Activo, 0 = Inactivo
 
-        // Actualizar donde el id_usuario coincida
         int rowsAffected = db.update(TABLE_USUARIO, values, "id_usuario = ?", new String[]{String.valueOf(idUsuario)});
         return rowsAffected > 0;
     }
