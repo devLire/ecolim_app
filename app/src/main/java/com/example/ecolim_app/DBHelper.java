@@ -87,37 +87,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // SEEDING
 
-        // 1. Insertar Usuarios
-        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Ernesto Pérez', '12345678', '1234', 'Operario')"); // ID: 1
-        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('Admin ECOLIM', '1234', 'admin', 'Supervisor')"); // ID: 2
-        db.execSQL("INSERT INTO " + TABLE_USUARIO + " (nombre_completo, dni, contrasena, rol) VALUES ('María Gómez', '87654321', '1234', 'Operario')"); // ID: 3
+        DatabaseSeeder.poblarDatos(db);
 
-        // 2. Insertar Categorías de Residuos
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Plástico', 'Kg')"); // ID: 1
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Orgánico', 'Kg')"); // ID: 2
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Papel', 'Kg')");    // ID: 3
-        db.execSQL("INSERT INTO " + TABLE_CATEGORIA + " (nombre_categoria, unidad_medida) VALUES ('Peligroso', 'Litros')"); // ID: 4
-
-        // 3. Insertar Zonas de Limpieza
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Almacén Principal', 'Planta Baja')"); // ID: 1
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Comedor', 'Piso 1')"); // ID: 2
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Oficinas Administrativas', 'Piso 2')"); // ID: 3
-        db.execSQL("INSERT INTO " + TABLE_ZONA + " (nombre_zona, ubicacion_especifica) VALUES ('Patio Trasero', 'Exterior')"); // ID: 4
-
-        // 4. Insertar Registros (Cabecera de la recolección)
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 2, '2026-03-07 08:30:00')"); // ID: 1
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 1, '2026-03-07 09:15:00')"); // ID: 2
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (1, 4, '2026-03-07 10:00:00')"); // ID: 3
-        db.execSQL("INSERT INTO " + TABLE_REGISTRO + " (id_usuario, id_zona, fecha_hora) VALUES (3, 3, '2026-03-07 14:20:00')"); // ID: 4
-
-        // 5. Insertar Detalles de los Residuos recolectados
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (1, 1, 2.5)");
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (1, 2, 1.2)");
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (2, 3, 5.0)");
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (3, 4, 2.0)");
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (3, 1, 1.5)");
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (4, 3, 3.0)");
-        db.execSQL("INSERT INTO " + TABLE_DETALLE + " (id_registro, id_categoria, cantidad) VALUES (4, 2, 0.5)");
     }
 
     @Override
