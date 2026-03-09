@@ -125,13 +125,32 @@ public class PantallaReporteAdmin extends AppCompatActivity {
 
     private void mostrarCalendario(TextInputEditText target) {
         Calendar cal = Calendar.getInstance();
+
+        // Extraer la fecha actual del EditText para iniciar el calendario en ese día
+        String fechaActualTxt = target.getText().toString();
+        if (!fechaActualTxt.isEmpty()) {
+            try {
+                Date fechaGuardada = formatoDB.parse(fechaActualTxt);
+                if (fechaGuardada != null) {
+                    cal.setTime(fechaGuardada);
+                }
+            } catch (Exception e) {
+                // Si el formato es incorrecto, tomar el día actual
+                e.printStackTrace();
+            }
+        }
+
+        int yearInicial = cal.get(Calendar.YEAR);
+        int monthInicial = cal.get(Calendar.MONTH);
+        int dayInicial = cal.get(Calendar.DAY_OF_MONTH);
+
         new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             String fecha = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             target.setText(fecha);
 
             generarReporte();
 
-        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+        }, yearInicial, monthInicial, dayInicial).show();
     }
 
     private void cargarFiltros() {

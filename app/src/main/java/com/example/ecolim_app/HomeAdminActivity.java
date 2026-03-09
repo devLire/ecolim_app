@@ -146,16 +146,32 @@ public class HomeAdminActivity extends AppCompatActivity {
     private void mostrarCalendario(EditText editTextTarget) {
         Calendar calendario = Calendar.getInstance();
 
-        // DatePickerDialog de Material Design
+        // Extraer la fecha actual del EditText para iniciar el calendario en ese día
+        String fechaActualTxt = editTextTarget.getText().toString();
+        if (!fechaActualTxt.isEmpty()) {
+            try {
+                Date fechaGuardada = formatoDB.parse(fechaActualTxt);
+                if (fechaGuardada != null) {
+                    calendario.setTime(fechaGuardada);
+                }
+            } catch (Exception e) {
+                // Si el formato es incorrecto, tomar el día actual
+                e.printStackTrace();
+            }
+        }
+
+        int yearInicial = calendario.get(Calendar.YEAR);
+        int monthInicial = calendario.get(Calendar.MONTH);
+        int dayInicial = calendario.get(Calendar.DAY_OF_MONTH);
+
         DatePickerDialog dpd = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             // Se suma +1 al mes porque en Java los meses van de 0 a 11
             String fechaSeleccionada = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             editTextTarget.setText(fechaSeleccionada);
 
-            // ¡Cada vez que eligen una fecha nueva, la tabla se vuelve a dibujar sola!
             actualizarTablaDatosDinamica(etFechaDesde.getText().toString(), etFechaHasta.getText().toString());
 
-        }, calendario.get(Calendar.YEAR), calendario.get(Calendar.MONTH), calendario.get(Calendar.DAY_OF_MONTH));
+        }, yearInicial, monthInicial, dayInicial);
 
         dpd.show();
     }
