@@ -3,8 +3,11 @@ package com.example.ecolim_app;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ public class HomeUsuarioActivity extends AppCompatActivity {
     int idUsuarioLogueado = -1;
     TextView labelBienvenida, labelTotalRecolectado;
     ImageView btnPerfil;
+    EditText etBuscar; // <-- NUESTRO BUSCADOR
 
     FloatingActionButton btnNuevaRecoleccion;
 
@@ -46,7 +50,7 @@ public class HomeUsuarioActivity extends AppCompatActivity {
         labelTotalRecolectado = findViewById(R.id.labelTotalRecolectado);
         btnPerfil = findViewById(R.id.btnPerfil);
         listActividades = findViewById(R.id.listActividades);
-
+        etBuscar = findViewById(R.id.etBuscar); // <-- VINCULAMOS EL BUSCADOR
         btnNuevaRecoleccion = findViewById(R.id.btnNuevaRecoleccion);
 
         btnPerfil.setOnClickListener(new View.OnClickListener() {
@@ -78,6 +82,26 @@ public class HomeUsuarioActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(HomeUsuarioActivity.this, NuevaRecoleccionActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        // LÓGICA DEL BUSCADOR
+        etBuscar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No necesitamos hacer nada antes de que cambie
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Cada vez que el usuario escribe o borra una letra, filtramos el adapter
+                if (adapter != null) {
+                    adapter.getFilter().filter(s);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -121,5 +145,9 @@ public class HomeUsuarioActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter<String>(this, R.layout.item_residuo, R.id.tvTextoItem, listaResiduos);
         listActividades.setAdapter(adapter);
+
+        if (etBuscar.getText().toString().trim().length() > 0) {
+            adapter.getFilter().filter(etBuscar.getText().toString());
+        }
     }
 }
