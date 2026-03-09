@@ -22,12 +22,6 @@
             android:name=".FormUsuarioActivity"
             android:exported="false" />
         <activity
-            android:name=".EditarUsuario"
-            android:exported="false" />
-        <activity
-            android:name=".AnadirUsuario"
-            android:exported="false" />
-        <activity
             android:name=".GestionAdminActivity"
             android:exported="false" />
         <activity
